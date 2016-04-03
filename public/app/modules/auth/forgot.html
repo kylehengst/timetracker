@@ -1,0 +1,14 @@
+<div class="alert alert-danger" ng-show="error">
+	{{authvm.error}}
+</div>
+<h2>Forgot</h2>
+<div ng-show="authvm.sent">
+	<p>A temporary password has been sent to your email address</p>
+</div>
+<form ng-hide="authvm.sent" ng-submit="authvm.submitForm()">
+	<div class="form-group">
+		<label class="form-input">Email</label>
+		<input type="email" class="form-control" ng-model="authvm.form.email" required>
+	</div>
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>

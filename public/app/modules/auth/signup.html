@@ -1,0 +1,15 @@
+<div class="alert alert-danger" ng-show="error">
+	{{authvm.error}}
+</div>
+<h2>Sign Up</h2>
+<form ng-submit="authvm.submitForm()">
+	<div class="form-group">
+		<label class="form-input">Email</label>
+		<input type="email" class="form-control" ng-model="authvm.form.email" required>
+	</div>
+	<div class="form-group">
+		<label class="form-input">Password</label>
+		<input type="password" class="form-control" ng-model="authvm.form.password" required>
+	</div>
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>

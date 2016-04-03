@@ -1,0 +1,104 @@
+var gulp = require('gulp');
+var sass = require('gulp-sass');
+var rev = require('gulp-rev');
+var revReplace = require('gulp-rev-replace');
+var revCollector = require('gulp-rev-collector');
+var path = require('path');
+var clean = require('gulp-clean');
+var concat = require('gulp-concat');
+var autoprefixer = require('gulp-autoprefixer');
+var sourcemaps = require('gulp-sourcemaps');
+
+var sassOptions = {
+    errLogToConsole: true,
+    outputStyle: 'compact'
+};
+var autoprefixerOptions = {
+    browsers: ['last 2 versions', '> 5%', 'Firefox ESR']
+};
+var vendorCss = [
+    'vendor/normalize-3.0.2/normalize.css',
+    'vendor/perfect-scrollbar-0.6.3/css/perfect-scrollbar.min.css',
+    'vendor/animate-3.3.0/animate.min.css',
+    'vendor/angular-carousel-0.3.13/angular-carousel.css',
+    'vendor/slick/slick/slick.css',
+    'vendor/angular-socialshare-master/angular-socialshare.css'
+];
+var vendorScripts = [
+    'vendor/jquery/jquery-2.1.4.min.js',
+    'vendor/angular-1.4.3/angular.min.js',
+    'vendor/angular-1.4.3/angular-animate.min.js',
+    'vendor/angular-1.4.3/angular-sanitize.min.js',
+    'vendor/angular-1.4.3/angular-touch.min.js',
+    'vendor/angular-ui-router-0.2.15/angular-ui-router.min.js',
+    'vendor/angular-ui-router-title/angular-ui-router-title.js',
+    'vendor/angular-facebook/angular-facebook.js',
+    'vendor/angular-file-upload-1.1.5/angular-file-upload.min.js',
+    'vendor/moment/moment.min.js',
+    'vendor/angular-moment/angular-moment.min.beta.js',
+    'vendor/perfect-scrollbar-0.6.3/js/min/perfect-scrollbar.jquery.min.js',
+    'vendor/angular-perfect-scrollbar/angular-perfect-scrollbar.js',
+    'vendor/angular-jl-tether/jl-tether.min.js',
+    'vendor/angular-payments/angular-payments-2105-09-11.min.js',
+    'vendor/angular-socialshare-0.1.10/angular-socialshare.js',
+    'vendor/angular-carousel-0.3.13/angular-carousel.js',
+    'vendor/flexslider/jquery.flexslider.js',
+    'vendor/slick/slick/slick.js',
+    'vendor/angular-slick-carousel/dist/angular-slick.js',
+    'vendor/angular-socket-io/socket.js',
+    'vendor/humanize-duration/humanize-duration.js',
+    'vendor/angular-timer/angular-timer.js',
+    'vendor/angular-socialshare-master/angular-socialshare.js'
+];
+
+gulp.task('css_sass', function() {
+
+    return gulp
+        .src('resources/sass/app.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass(sassOptions).on('error', sass.logError))
+        .pipe(sourcemaps.write())
+        //.pipe(autoprefixer(autoprefixerOptions))
+        .pipe(gulp.dest('assets/css'));
+
+});
+
+gulp.task('css_prefix', ['css_sass'], function(){
+
+    return gulp
+        .src('assets/css/app.css')
+        .pipe(autoprefixer(autoprefixerOptions))
+        .pipe(gulp.dest('assets/css'))
+
+});
+
+gulp.task('css_concat_vendor', function(){
+    return gulp
+        .src(vendorCss)
+        .pipe(concat('vendor.css'))
+        .pipe(gulp.dest('css'))
+        ;
+});
+
+gulp.task('scripts_concat_vendor', function(){
+    return gulp
+        .src(vendorScripts)
+        .pipe(concat('vendor.js'))
+        .pipe(gulp.dest('js'))
+        ;
+});
+
+gulp.task('scripts_concat', function(){
+    return gulp
+        .src(['app/**/*.js'])
+        .pipe(concat('all.js'))
+        .pipe(gulp.dest('js'))
+        ;
+});
+
+gulp.task('default', ['css_sass','css_prefix']);
+
+gulp.task('watch', function() {
+    gulp.watch(['resources/sass/**/*.scss'], ['css_sass','css_prefix']);
+    //gulp.watch(['app/**/*.js'], ['scripts_concat']);
+});
