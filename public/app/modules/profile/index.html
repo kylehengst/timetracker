@@ -1,0 +1,45 @@
+<div class="alert alert-danger" ng-show="error">
+    {{error}}
+</div>
+<h2>Profile</h2>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div ng-show="profilevm.emailUpdated" class="alert alert-success">Email Updated</div>
+        <h3>Update Email</h3>
+        <form ng-submit="profilevm.submitEmailForm()">
+            <div class="form-group">
+                <label class="form-input">Old Email</label>
+                <input type="email" class="form-control" ng-model="profilevm.form.oldEmail">
+            </div>
+            <div class="form-group">
+                <label class="form-input">New Email</label>
+                <input type="email" class="form-control" ng-model="profilevm.form.newEmail">
+            </div>
+            <div class="form-group">
+                <label class="form-input">Password</label>
+                <input type="password" class="form-control" ng-model="profilevm.form.password">
+            </div>
+            <button class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="col-sm-6">
+        <div ng-show="profilevm.passwordUpdated" class="alert alert-success">Password Updated</div>
+        <h3>Update Password</h3>
+        <form ng-submit="profilevm.submitPasswordForm()">
+            <div class="form-group">
+                <label class="form-input">Email</label>
+                <input type="email" class="form-control" ng-model="profilevm.form.email">
+            </div>
+            <div class="form-group">
+                <label class="form-input">Old Password</label>
+                <input type="password" class="form-control" ng-model="profilevm.form.oldPassword">
+            </div>
+            <div class="form-group">
+                <label class="form-input">New Password</label>
+                <input type="password" class="form-control" ng-model="profilevm.form.newPassword">
+            </div>
+            <button class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>

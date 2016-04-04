@@ -1,3 +1,17 @@
-.red{
-  color: red;
+body {
+  padding-top: 70px;
+}
+#loading{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: white;
+  transition: all .3s;
+  display: flex;
+  font-size: 36px;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }

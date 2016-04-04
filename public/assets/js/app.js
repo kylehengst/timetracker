@@ -107,7 +107,7 @@
 
     angular.module('app.routes', [])
 
-        .config(function ($stateProvider, $urlRouterProvider) {
+        .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
             $stateProvider
 
@@ -141,17 +141,37 @@
                     controller: 'AuthForgotCtrl',
                     controllerAs: 'authvm'
                 })
+                .state('profile', {
+                    url: '/profile',
+                    templateUrl: 'app/modules/profile/index.html',
+                    controller: 'ProfileCtrl',
+                    controllerAs: 'profilevm'
+                })
+                .state('jobs', {
+                    abstract: true,
+                    url: '/jobs',
+                    templateUrl: 'app/modules/jobs/index.html'
+                })
+                .state('jobs.list', {
+                    url:'',
+                    templateUrl: 'app/modules/jobs/jobs.html',
+                    controller: 'JobsCtrl',
+                    controllerAs: 'jobsvm'
+                })
 
             ;
 
             $urlRouterProvider.otherwise('/');
             // $locationProvider.html5Mode(true);
 
+            $httpProvider.interceptors.push('Loading');
+
         })
 
         .run(function ($rootScope, ENV) {
 
             $rootScope.ENV = ENV;
+            $rootScope.loading = 0;
 
             //state listeners
             if (ENV == 'dev') {
@@ -259,16 +279,18 @@
 
         .service('App', App);
 
-    App.$inject = ['Auth','$timeout'];
+    App.$inject = ['Auth','$rootScope','$timeout'];
 
-    function App(Auth, $timeout) {
+    function App(Auth, $rootScope, $timeout) {
 
         var model = this;
         model.user = -1;
 
+        $rootScope.loading++;
+
         Auth.$onAuth(function (authData) {
-            console.log(authData);
             $timeout(function () {
+                $rootScope.loading--;
                 model.user = authData;
             });
         });
@@ -320,6 +342,38 @@
             return $http.get(urls.LATEST).then(function(response){
                 return response.data;
             });
+        }
+
+    }
+
+})();
+(function () {
+    'use strict';
+
+    angular.module('app')
+
+        .factory('Loading', Loading);
+
+    Loading.$inject = ['$rootScope', '$q'];
+
+    function Loading($rootScope, $q) {
+
+        return {
+            request: function (config) {
+                $rootScope.loading++;
+                return config;
+            },
+            requestError: function (rejection) {
+                return $q.reject(rejection);
+            },
+            response: function (response) {
+                $rootScope.loading--;
+                return response;
+            },
+            responseError: function (rejection) {
+                $rootScope.loading--;
+                return $q.reject(rejection);
+            }
         }
 
     }
@@ -414,5 +468,79 @@
         
     }
 
+
+})();
+(function () {
+    'use strict';
+
+    angular.module('app.controllers')
+        .controller('JobsCtrl', JobsCtrl)
+    ;
+
+    JobsCtrl.$inject = ['$state', '$rootScope', 'Auth'];
+
+    function JobsCtrl($state, $rootScope, Auth) {
+
+        var jobsvm = this;
+
+
+    }
+
+})();
+(function () {
+    'use strict';
+
+    angular.module('app.controllers')
+        .controller('ProfileCtrl', ProfileCtrl)
+    ;
+
+    ProfileCtrl.$inject = ['$state', '$rootScope', 'Auth'];
+
+    function ProfileCtrl($state, $rootScope, Auth) {
+
+        var profilevm = this;
+        profilevm.form = {email:'',oldEmail:'',newEmail:'',password:'',oldPassword:'',newPassword:''};
+        profilevm.error = '';
+        profilevm.submitEmailForm = submitEmailForm;
+        profilevm.submitPasswordForm = submitPasswordForm;
+
+        function submitEmailForm(){
+            profilevm.error = '';
+            profilevm.emailUpdated = false;
+            $rootScope.loading++;
+            Auth.$changeEmail({
+                oldEmail: profilevm.form.email,
+                newEmail: profilevm.form.newEmail,
+                password: profilevm.form.password
+            }).then(function(userData) {
+                profilevm.emailUpdated = true;
+                $rootScope.loading--;
+            }).catch(function(error) {
+                profilevm.error = error.toString();
+                $rootScope.loading--;
+            });
+
+        };
+
+        function submitPasswordForm(){
+            profilevm.error = '';
+            profilevm.passwordUpdated = false;
+            $rootScope.loading++;
+            Auth.$changePassword({
+                email: profilevm.form.email,
+                oldPassword: profilevm.form.oldPassword,
+                newPassword: profilevm.form.newPassword
+            }).then(function(userData) {
+                // $state.go('auth.login');
+                profilevm.passwordUpdated = true;
+                $rootScope.loading--;
+            }).catch(function(error) {
+                profilevm.error = error.toString();
+                $rootScope.loading--;
+            });
+
+        };
+
+    }
 
 })();

@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/components.css">
-    <style>
-        body {
-            padding-top: 70px;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
+
+<div id="loading" ng-hide="!$root.loading">
+    <i class="fa fa-spinner fa-spin"></i>
+</div>
 
 <nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavCtrl as navvm">
     <div class="container">
@@ -29,10 +29,10 @@
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div ng-show="navvm.App.user!=-1" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul ng-show="navvm.App.user" class="nav navbar-nav navbar-right">
-                <li><a href="#">Jobs</a></li>
-                <li><a href="#">Account</a></li>
+                <li><a href="#" ui-sref="jobs.list">Jobs</a></li>
+                <li><a href="#" ui-sref="profile">Account</a></li>
                 <li><a href="#" ng-click="navvm.logout()">Logout</a></li>
             </ul>
             <ul ng-show="!navvm.App.user" class="nav navbar-nav navbar-right">
@@ -40,7 +40,6 @@
                 <li><a href="#" ui-sref="auth.signup">Register</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
-
 
     </div>
 </nav>

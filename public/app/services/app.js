@@ -5,16 +5,18 @@
 
         .service('App', App);
 
-    App.$inject = ['Auth','$timeout'];
+    App.$inject = ['Auth','$rootScope','$timeout'];
 
-    function App(Auth, $timeout) {
+    function App(Auth, $rootScope, $timeout) {
 
         var model = this;
         model.user = -1;
 
+        $rootScope.loading++;
+
         Auth.$onAuth(function (authData) {
-            console.log(authData);
             $timeout(function () {
+                $rootScope.loading--;
                 model.user = authData;
             });
         });

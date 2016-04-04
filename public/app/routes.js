@@ -3,7 +3,7 @@
 
     angular.module('app.routes', [])
 
-        .config(function ($stateProvider, $urlRouterProvider) {
+        .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
             $stateProvider
 
@@ -37,17 +37,37 @@
                     controller: 'AuthForgotCtrl',
                     controllerAs: 'authvm'
                 })
+                .state('profile', {
+                    url: '/profile',
+                    templateUrl: 'app/modules/profile/index.html',
+                    controller: 'ProfileCtrl',
+                    controllerAs: 'profilevm'
+                })
+                .state('jobs', {
+                    abstract: true,
+                    url: '/jobs',
+                    templateUrl: 'app/modules/jobs/index.html'
+                })
+                .state('jobs.list', {
+                    url:'',
+                    templateUrl: 'app/modules/jobs/jobs.html',
+                    controller: 'JobsCtrl',
+                    controllerAs: 'jobsvm'
+                })
 
             ;
 
             $urlRouterProvider.otherwise('/');
             // $locationProvider.html5Mode(true);
 
+            $httpProvider.interceptors.push('Loading');
+
         })
 
         .run(function ($rootScope, ENV) {
 
             $rootScope.ENV = ENV;
+            $rootScope.loading = 0;
 
             //state listeners
             if (ENV == 'dev') {
