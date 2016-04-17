@@ -5,9 +5,9 @@
 
         .controller('NavCtrl', NavCtrl);
 
-    NavCtrl.$inject = ['$state','$stateParams', 'App','Auth'];
+    NavCtrl.$inject = ['$state','$stateParams', '$rootScope', 'App','Auth'];
 
-    function NavCtrl($state, $stateParams, App,Auth) {
+    function NavCtrl($state, $stateParams, $rootScope, App, Auth) {
 
         var navvm = this;
         navvm.App = App;
@@ -15,7 +15,7 @@
         
         function logout(){
             Auth.$unauth();
-            $state.go('home');
+            $state.go('auth.login');
         }
 
     }

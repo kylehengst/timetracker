@@ -1,3 +1,13 @@
 body { padding-top: 70px; }
 
-#loading { position: fixed; left: 0; right: 0; bottom: 0; top: 0; background: white; -webkit-transition: all .3s; transition: all .3s; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; font-size: 36px; -webkit-box-align: center; -webkit-align-items: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center; -webkit-justify-content: center; -ms-flex-pack: center; justify-content: center; z-index: 9999; }
+#loading { position: fixed; left: 0; right: 0; bottom: 0; top: 0; -webkit-transition: all .3s; transition: all .3s; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; font-size: 36px; -webkit-box-align: center; -webkit-align-items: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center; -webkit-justify-content: center; -ms-flex-pack: center; justify-content: center; z-index: 9999; }
+
+h2 { margin-bottom: 20px; }
+
+.editable-wrap { margin-bottom: 20px; }
+
+.editable-click, a.editable-click { border-bottom: none; color: inherit; border-bottom: dotted 1px transparent; }
+
+.editable-click:hover, a.editable-click:hover { border-bottom: dotted 1px #2a6496; cursor: pointer; }
+
+.actions { text-align: right; }

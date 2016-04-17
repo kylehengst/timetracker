@@ -1,17 +1,41 @@
 body {
   padding-top: 70px;
 }
-#loading{
+
+#loading {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
   top: 0;
-  background: white;
+  //background: white;
   transition: all .3s;
   display: flex;
   font-size: 36px;
   align-items: center;
   justify-content: center;
   z-index: 9999;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.editable-wrap {
+  margin-bottom: 20px;
+}
+
+.editable-click, a.editable-click {
+  border-bottom: none;
+  color: inherit;
+  border-bottom: dotted 1px rgba(0, 0, 0, 0);
+}
+
+.editable-click:hover, a.editable-click:hover {
+  border-bottom: dotted 1px #2a6496;
+  cursor: pointer;
+}
+
+.actions {
+  text-align: right;
 }

@@ -1,3 +1,23 @@
-
 <h2>Jobs</h2>
 
+<form class="form-horizontal" ng-submit="jobsvm.addJob()">
+
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon">Name</span>
+                <input type="text" class="form-control" ng-model="jobsvm.newJob.name">
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-primary btn-block">Add</button>
+        </div>
+    </div>
+
+</form>
+
+<div class="list-group">
+    <a class="list-group-item" ng-repeat="j in jobsvm.jobs" ui-sref="jobs.job({job:j.$id})">
+        {{j.name}}
+    </a>
+</div>

@@ -1,0 +1,73 @@
+<h2 editable-text="jobvm.job.name" onbeforesave="jobvm.updateJob($data)">{{ jobvm.job.name }}</h2>
+
+<form class="form-horizontal" ng-submit="jobvm.addTime()">
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="input-group">
+                <span class="input-group-addon">Mins</span>
+                <input type="number" class="form-control" ng-model="jobvm.newTime.minutes">
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group">
+                <span class="input-group-addon">Description</span>
+                <input type="text" class="form-control" ng-model="jobvm.newTime.description">
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-primary btn-block">Add</button>
+        </div>
+    </div>
+
+
+</form>
+
+<div ng-show="jobvm.times.length>0">
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Time</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th class="actions"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr ng-repeat="time in jobvm.times | orderBy:'date'">
+            <td>
+                <div editable-number="time.minutes" e-min="1" onbeforesave="jobvm.updateTime(time,'minutes',$data)">
+                    {{time.minutes || '&nbsp;' }}
+                </div>
+            </td>
+            <td>
+                <div editable-text="time.description" onbeforesave="jobvm.updateTime(time,'description',$data)">
+                    {{time.description || '&nbsp;' }}
+                </div>
+            </td>
+            <td>
+                <div editable-text="time.date" onbeforesave="jobvm.updateTime(time,'date',$data)">
+                    {{ time.date | fromNow }}
+                </div>
+            </td>
+            <td class="actions">
+                <a class="btn btn-xs btn-danger" really-message="Are you sure?" really-click="jobvm.deleteTime(time)"><i
+                        class="fa fa-trash"></i></a>
+            </td>
+        </tr>
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="4">{{jobvm.totalTime}}</td>
+            </tr>
+        </tfoot>
+
+    </table>
+
+</div>
+
+<a really-click="jobvm.deleteJob()" really-message="Confirm" class="btn btn-xs btn-danger">Delete Job</a>
+

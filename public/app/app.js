@@ -16,7 +16,7 @@
         'app.config',
         'app.filters',
 
-        'app.directives',
+        'app.directives',   
         'app.controllers'
 
     ]);

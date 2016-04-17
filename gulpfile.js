@@ -14,6 +14,7 @@ var autoprefixerOptions = {
 var componentsCss = [
     'bower_components/bootstrap/dist/css/bootstrap.css',
     'bower_components/toastr/toastr.css',
+    'bower_components/angular/angular-csp.css',
     'bower_components/angular-xeditable/dist/css/xeditable.css'
 ];
 var componentsJs = [
@@ -30,7 +31,8 @@ var componentsJs = [
     'bower_components/toastr/toastr.js',
     'bower_components/firebase/firebase.js',
     'bower_components/angularfire/dist/angularfire.js',
-    'bower_components/angular-xeditable/dist/js/xeditable.js'
+    'bower_components/angular-xeditable/dist/js/xeditable.js',
+    'bower_components/moment/min/moment-with-locales.min.js'
 ];
 
 gulp.task('default', ['concat_bower_js','concat_bower_css','css_sass','css_prefix','concat_js']);

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular.module('app.filters', [])
@@ -28,6 +28,32 @@
                 return result;
             };
 
+        })
+
+        .filter('fromNow', function () {
+
+            return function (str) {
+
+                return moment(str).fromNow();
+
+            }
+
+        })
+
+        .filter('mimutesToHours', function () {
+    
+            return function (str) {
+    
+                var minutes = eval(str);
+    
+                var h = Math.floor(minutes / 60);
+    
+                var m = minutes - (h * 60);
+    
+                return h ? h + ' hrs ' + m + ' mins' : minutes + ' mins';
+    
+            }
+    
         })
 
     ;

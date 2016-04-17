@@ -1,0 +1,48 @@
+{
+  "rules": {
+    "jobs": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$job_id": {
+        ".read": "data.child('user_id').val() === auth.uid",
+        "name": {
+          ".validate": "newData.isString()"
+        },
+        "user_id": {
+          ".validate": "(data.exists() && data.val() === auth.uid) || !data.exists()"
+        },
+        "date": {
+          ".validate": "newData.isString()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "times": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$job_id": {
+        ".read": "root.child('jobs').child($job_id).exists()",
+        "$time_id": {
+          ".read": "(data.exists() && data.child('user_id').val() === auth.uid) || !data.exists()",
+          "minutes": {
+            ".validate": "newData.isNumber()"
+          },
+          "description": {
+            ".validate": "newData.isString()"
+          },
+          "user_id": {
+            ".validate": "(data.exists() && data.val() === auth.uid) || !data.exists()"
+          },
+          "date": {
+            ".validate": "newData.isString()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    }
+  }
+}

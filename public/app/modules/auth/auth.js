@@ -28,7 +28,7 @@
                 password: authvm.form.password
             }).then(function (user) {
                 console.log(user);
-                $state.go('home');
+                $state.go('jobs.list');
             }, function (error) {
                 authvm.error = error.toString();
             });
@@ -46,7 +46,6 @@
         authvm.submitForm = submitForm;
 
         function submitForm(){
-            console.log('submit');
             authvm.error = '';
             Auth.$createUser({
                 email: authvm.form.email,

@@ -18,17 +18,14 @@
         function submitEmailForm(){
             profilevm.error = '';
             profilevm.emailUpdated = false;
-            $rootScope.loading++;
             Auth.$changeEmail({
                 oldEmail: profilevm.form.email,
                 newEmail: profilevm.form.newEmail,
                 password: profilevm.form.password
             }).then(function(userData) {
                 profilevm.emailUpdated = true;
-                $rootScope.loading--;
             }).catch(function(error) {
                 profilevm.error = error.toString();
-                $rootScope.loading--;
             });
 
         };
@@ -36,7 +33,6 @@
         function submitPasswordForm(){
             profilevm.error = '';
             profilevm.passwordUpdated = false;
-            $rootScope.loading++;
             Auth.$changePassword({
                 email: profilevm.form.email,
                 oldPassword: profilevm.form.oldPassword,
@@ -44,10 +40,8 @@
             }).then(function(userData) {
                 // $state.go('auth.login');
                 profilevm.passwordUpdated = true;
-                $rootScope.loading--;
             }).catch(function(error) {
                 profilevm.error = error.toString();
-                $rootScope.loading--;
             });
 
         };

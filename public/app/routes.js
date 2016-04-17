@@ -8,7 +8,7 @@
             $stateProvider
 
                 .state('home', {
-                    url: '',
+                    url: '/',
                     resolve: {},
                     templateUrl: 'app/views/index.html',
                     controller: 'MainCtrl',
@@ -16,7 +16,7 @@
                 })
                 .state('auth', {
                     abstract: true,
-                    url:'/auth',
+                    url: '/auth',
                     templateUrl: 'app/modules/auth/index.html',
                 })
                 .state('auth.login', {
@@ -45,14 +45,44 @@
                 })
                 .state('jobs', {
                     abstract: true,
+                    resolve: {
+                        user: function (Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    },
+                    onEnter: function (user, $state) {
+                        if (!user) $state.go('home');
+                    },
                     url: '/jobs',
                     templateUrl: 'app/modules/jobs/index.html'
                 })
                 .state('jobs.list', {
-                    url:'',
+                    url: '',
+                    resolve: {
+                        jobs: function (JobsFactory, user) {
+                            return JobsFactory.getAll(user.uid);
+                        }
+                    },
                     templateUrl: 'app/modules/jobs/jobs.html',
                     controller: 'JobsCtrl',
                     controllerAs: 'jobsvm'
+                })
+                .state('jobs.job', {
+                    url: '/:job',
+                    resolve: {
+                        job: function (JobsFactory, $stateParams) {
+                            return JobsFactory.get($stateParams.job);
+                        },
+                        times: function (JobsTimesFactory, $stateParams, user) {
+                            return JobsTimesFactory.getAll($stateParams.job, user.uid);
+                        }
+                    },
+                    onEnter: function ($state, job, user) {
+                        if (job.user_id != user.uid) $state.go('home');
+                    },
+                    templateUrl: 'app/modules/jobs/job.html',
+                    controller: 'JobsJobCtrl',
+                    controllerAs: 'jobvm'
                 })
 
             ;
@@ -64,10 +94,11 @@
 
         })
 
-        .run(function ($rootScope, ENV) {
+        .run(function ($rootScope, ENV, editableOptions) {
 
             $rootScope.ENV = ENV;
             $rootScope.loading = 0;
+            editableOptions.theme = 'bs3';
 
             //state listeners
             if (ENV == 'dev') {
