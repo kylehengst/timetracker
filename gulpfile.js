@@ -58,7 +58,7 @@ gulp.task('css_prefix', ['css_sass'], function(){
 });
 gulp.task('concat_js',function(){
     return gulp
-        .src(['./public/app/**/*.js'])
+        .src(['./app/**/*.js'])
         .pipe(concat('app.js'))
         .pipe(gulp.dest('./public/assets/js'))
         ;

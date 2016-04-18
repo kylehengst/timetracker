@@ -44,6 +44,7 @@
         function deleteTime(time) {
             jobvm.times.$remove(time).then(function(n){
                 toastr.info('Time deleted');
+                sumTime();
             }, function(error){
                 toastr.error(error);
             });

@@ -10,36 +10,36 @@
                 .state('home', {
                     url: '/',
                     resolve: {},
-                    templateUrl: 'app/views/index.html',
+                    templateUrl: 'views/index.html',
                     controller: 'MainCtrl',
                     controllerAs: 'mainvm'
                 })
                 .state('auth', {
                     abstract: true,
                     url: '/auth',
-                    templateUrl: 'app/modules/auth/index.html',
+                    templateUrl: 'views/auth/index.html',
                 })
                 .state('auth.login', {
                     url: '/login',
-                    templateUrl: 'app/modules/auth/login.html',
+                    templateUrl: 'views/auth/login.html',
                     controller: 'AuthLoginCtrl',
                     controllerAs: 'authvm'
                 })
                 .state('auth.signup', {
                     url: '/signup',
-                    templateUrl: 'app/modules/auth/signup.html',
+                    templateUrl: 'views/auth/signup.html',
                     controller: 'AuthSignupCtrl',
                     controllerAs: 'authvm'
                 })
                 .state('auth.forgot', {
                     url: '/forgot',
-                    templateUrl: 'app/modules/auth/forgot.html',
+                    templateUrl: 'views/auth/forgot.html',
                     controller: 'AuthForgotCtrl',
                     controllerAs: 'authvm'
                 })
                 .state('profile', {
                     url: '/profile',
-                    templateUrl: 'app/modules/profile/index.html',
+                    templateUrl: 'views/profile/index.html',
                     controller: 'ProfileCtrl',
                     controllerAs: 'profilevm'
                 })
@@ -54,7 +54,7 @@
                         if (!user) $state.go('home');
                     },
                     url: '/jobs',
-                    templateUrl: 'app/modules/jobs/index.html'
+                    templateUrl: 'views/jobs/index.html'
                 })
                 .state('jobs.list', {
                     url: '',
@@ -63,7 +63,7 @@
                             return JobsFactory.getAll(user.uid);
                         }
                     },
-                    templateUrl: 'app/modules/jobs/jobs.html',
+                    templateUrl: 'views/jobs/jobs.html',
                     controller: 'JobsCtrl',
                     controllerAs: 'jobsvm'
                 })
@@ -80,7 +80,7 @@
                     onEnter: function ($state, job, user) {
                         if (job.user_id != user.uid) $state.go('home');
                     },
-                    templateUrl: 'app/modules/jobs/job.html',
+                    templateUrl: 'views/jobs/job.html',
                     controller: 'JobsJobCtrl',
                     controllerAs: 'jobvm'
                 })

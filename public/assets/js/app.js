@@ -140,36 +140,36 @@
                 .state('home', {
                     url: '/',
                     resolve: {},
-                    templateUrl: 'app/views/index.html',
+                    templateUrl: 'views/index.html',
                     controller: 'MainCtrl',
                     controllerAs: 'mainvm'
                 })
                 .state('auth', {
                     abstract: true,
                     url: '/auth',
-                    templateUrl: 'app/modules/auth/index.html',
+                    templateUrl: 'views/auth/index.html',
                 })
                 .state('auth.login', {
                     url: '/login',
-                    templateUrl: 'app/modules/auth/login.html',
+                    templateUrl: 'views/auth/login.html',
                     controller: 'AuthLoginCtrl',
                     controllerAs: 'authvm'
                 })
                 .state('auth.signup', {
                     url: '/signup',
-                    templateUrl: 'app/modules/auth/signup.html',
+                    templateUrl: 'views/auth/signup.html',
                     controller: 'AuthSignupCtrl',
                     controllerAs: 'authvm'
                 })
                 .state('auth.forgot', {
                     url: '/forgot',
-                    templateUrl: 'app/modules/auth/forgot.html',
+                    templateUrl: 'views/auth/forgot.html',
                     controller: 'AuthForgotCtrl',
                     controllerAs: 'authvm'
                 })
                 .state('profile', {
                     url: '/profile',
-                    templateUrl: 'app/modules/profile/index.html',
+                    templateUrl: 'views/profile/index.html',
                     controller: 'ProfileCtrl',
                     controllerAs: 'profilevm'
                 })
@@ -184,7 +184,7 @@
                         if (!user) $state.go('home');
                     },
                     url: '/jobs',
-                    templateUrl: 'app/modules/jobs/index.html'
+                    templateUrl: 'views/jobs/index.html'
                 })
                 .state('jobs.list', {
                     url: '',
@@ -193,7 +193,7 @@
                             return JobsFactory.getAll(user.uid);
                         }
                     },
-                    templateUrl: 'app/modules/jobs/jobs.html',
+                    templateUrl: 'views/jobs/jobs.html',
                     controller: 'JobsCtrl',
                     controllerAs: 'jobsvm'
                 })
@@ -210,7 +210,7 @@
                     onEnter: function ($state, job, user) {
                         if (job.user_id != user.uid) $state.go('home');
                     },
-                    templateUrl: 'app/modules/jobs/job.html',
+                    templateUrl: 'views/jobs/job.html',
                     controller: 'JobsJobCtrl',
                     controllerAs: 'jobvm'
                 })
@@ -316,7 +316,7 @@
 
         var directive = {
             link: link,
-            templateUrl: 'app/directives/test.html',
+            templateUrl: 'views/directives/test.html',
             replace:true,
             restrict: 'A'
         };
@@ -529,6 +529,57 @@
     'use strict';
 
     angular.module('app.controllers')
+        .controller('ProfileCtrl', ProfileCtrl)
+    ;
+
+    ProfileCtrl.$inject = ['$state', '$rootScope', 'Auth'];
+
+    function ProfileCtrl($state, $rootScope, Auth) {
+
+        var profilevm = this;
+        profilevm.form = {email:'',oldEmail:'',newEmail:'',password:'',oldPassword:'',newPassword:''};
+        profilevm.error = '';
+        profilevm.submitEmailForm = submitEmailForm;
+        profilevm.submitPasswordForm = submitPasswordForm;
+
+        function submitEmailForm(){
+            profilevm.error = '';
+            profilevm.emailUpdated = false;
+            Auth.$changeEmail({
+                oldEmail: profilevm.form.email,
+                newEmail: profilevm.form.newEmail,
+                password: profilevm.form.password
+            }).then(function(userData) {
+                profilevm.emailUpdated = true;
+            }).catch(function(error) {
+                profilevm.error = error.toString();
+            });
+
+        };
+
+        function submitPasswordForm(){
+            profilevm.error = '';
+            profilevm.passwordUpdated = false;
+            Auth.$changePassword({
+                email: profilevm.form.email,
+                oldPassword: profilevm.form.oldPassword,
+                newPassword: profilevm.form.newPassword
+            }).then(function(userData) {
+                // $state.go('auth.login');
+                profilevm.passwordUpdated = true;
+            }).catch(function(error) {
+                profilevm.error = error.toString();
+            });
+
+        };
+
+    }
+
+})();
+(function () {
+    'use strict';
+
+    angular.module('app.controllers')
         .controller('JobsCtrl', JobsCtrl)
     ;
 
@@ -643,6 +694,7 @@
         function deleteTime(time) {
             jobvm.times.$remove(time).then(function(n){
                 toastr.info('Time deleted');
+                sumTime();
             }, function(error){
                 toastr.error(error);
             });
@@ -708,57 +760,6 @@
                 })
             }
         }
-
-    }
-
-})();
-(function () {
-    'use strict';
-
-    angular.module('app.controllers')
-        .controller('ProfileCtrl', ProfileCtrl)
-    ;
-
-    ProfileCtrl.$inject = ['$state', '$rootScope', 'Auth'];
-
-    function ProfileCtrl($state, $rootScope, Auth) {
-
-        var profilevm = this;
-        profilevm.form = {email:'',oldEmail:'',newEmail:'',password:'',oldPassword:'',newPassword:''};
-        profilevm.error = '';
-        profilevm.submitEmailForm = submitEmailForm;
-        profilevm.submitPasswordForm = submitPasswordForm;
-
-        function submitEmailForm(){
-            profilevm.error = '';
-            profilevm.emailUpdated = false;
-            Auth.$changeEmail({
-                oldEmail: profilevm.form.email,
-                newEmail: profilevm.form.newEmail,
-                password: profilevm.form.password
-            }).then(function(userData) {
-                profilevm.emailUpdated = true;
-            }).catch(function(error) {
-                profilevm.error = error.toString();
-            });
-
-        };
-
-        function submitPasswordForm(){
-            profilevm.error = '';
-            profilevm.passwordUpdated = false;
-            Auth.$changePassword({
-                email: profilevm.form.email,
-                oldPassword: profilevm.form.oldPassword,
-                newPassword: profilevm.form.newPassword
-            }).then(function(userData) {
-                // $state.go('auth.login');
-                profilevm.passwordUpdated = true;
-            }).catch(function(error) {
-                profilevm.error = error.toString();
-            });
-
-        };
 
     }
 

@@ -9,7 +9,7 @@
 
         var directive = {
             link: link,
-            templateUrl: 'app/directives/test.html',
+            templateUrl: 'views/directives/test.html',
             replace:true,
             restrict: 'A'
         };
