@@ -17,7 +17,7 @@
 </form>
 
 <div class="list-group">
-    <a class="list-group-item" ng-repeat="j in jobsvm.jobs" ui-sref="jobs.job({job:j.$id})">
+    <a class="list-group-item" ng-repeat="j in jobsvm.jobs" ui-sref="app.jobs.job({job:j.$id})">
         {{j.name}}
     </a>
 </div>

@@ -11,6 +11,14 @@
 
         var ref = new Firebase(FIREBASE_URL);
         return $firebaseAuth(ref);
+        
+        // return {
+        //     get: function(){
+        //         return $firebaseAuth(ref).$onAuth(function (authData) {
+        //             return authData;
+        //         });
+        //     }
+        // }
 
     }
 

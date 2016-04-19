@@ -82,5 +82,5 @@ gulp.task('concat_bower_js',function(){
 
 gulp.task('watch', function() {
     gulp.watch(['resources/sass/**/*.scss'], ['css_sass','css_prefix']);
-    gulp.watch(['./public/app/**/*.js'], ['concat_js']);
+    gulp.watch(['./app/**/*.js'], ['concat_js']);
 });

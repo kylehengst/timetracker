@@ -1,0 +1,11 @@
+<p>
+    <a class="btn btn-block btn-default" ng-click="timersvm.add()">Add Stopwatch</a>
+</p>
+
+<div class="well" ng-repeat="timer in timersvm.timers">
+    <input type="text" class="form-control" ng-model="timer.description" ng-change="timersvm.timers.$save(timer)">
+    <p>{{timer.hours}}:{{timer.minutes}}:{{timer.seconds}}</p>
+    <a class="btn btn-xs btn-primary pull-right" ng-show="!timersvm.activeTimers[timer.$id]" ng-click="timersvm.start(timer)">Start</a>
+    <a class="btn btn-xs btn-primary pull-right" ng-show="timersvm.activeTimers[timer.$id]" ng-click="timersvm.stop(timer)">Stop</a>
+    <a class="btn btn-xs btn-danger" really-click="timersvm.timers.$remove(timer)" really-message="Are you sure?">Delete</a>
+</div>

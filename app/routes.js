@@ -7,43 +7,91 @@
 
             $stateProvider
 
-                .state('home', {
-                    url: '/',
-                    resolve: {},
-                    templateUrl: 'views/index.html',
-                    controller: 'MainCtrl',
-                    controllerAs: 'mainvm'
+                .state('app',{
+                    url:'/app',
+                    abstract:true,
+                    resolve:{
+                        auth: function(Auth){
+                            return Auth.$waitForAuth().then(function(user){
+                                return user;
+                            },function(error){
+                                return false;
+                            });
+                        }
+                    },
+                    views:{
+                        'nav@':{
+                            templateUrl: 'views/nav.html',
+                            controller: 'NavCtrl',
+                            controllerAs: 'navvm'
+                        },
+                        'timers@':{
+                            templateUrl: 'views/timers.html',
+                            controller: 'TimersCtrl',
+                            controllerAs: 'timersvm'
+                        }
+                    }
                 })
-                .state('auth', {
+                .state('app.home', {
+                    url: '/home',
+                    resolve: {},
+                    onEnter: function ($state, auth) {
+                        if (!auth) $state.go('app.auth.login');
+                    },
+                    views:{
+                        '@':{
+                            templateUrl: 'views/index.html',
+                            controller: 'MainCtrl',
+                            controllerAs: 'mainvm'
+                        }
+                    }
+                })
+                .state('app.auth', {
                     abstract: true,
                     url: '/auth',
-                    templateUrl: 'views/auth/index.html',
+                    templateUrl: 'views/auth/index.html'
                 })
-                .state('auth.login', {
+                .state('app.auth.login', {
                     url: '/login',
-                    templateUrl: 'views/auth/login.html',
-                    controller: 'AuthLoginCtrl',
-                    controllerAs: 'authvm'
+                    views: {
+                        '@': {
+                            templateUrl: 'views/auth/login.html',
+                            controller: 'AuthLoginCtrl',
+                            controllerAs: 'authvm'
+                        }
+                    }
                 })
-                .state('auth.signup', {
+                .state('app.auth.signup', {
                     url: '/signup',
-                    templateUrl: 'views/auth/signup.html',
-                    controller: 'AuthSignupCtrl',
-                    controllerAs: 'authvm'
+                    views: {
+                        '@': {
+                            templateUrl: 'views/auth/signup.html',
+                            controller: 'AuthSignupCtrl',
+                            controllerAs: 'authvm'
+                        }
+                    }
                 })
-                .state('auth.forgot', {
+                .state('app.auth.forgot', {
                     url: '/forgot',
-                    templateUrl: 'views/auth/forgot.html',
-                    controller: 'AuthForgotCtrl',
-                    controllerAs: 'authvm'
+                    views: {
+                        '@': {
+                            templateUrl: 'views/auth/forgot.html',
+                            controller: 'AuthForgotCtrl',
+                            controllerAs: 'authvm'
+                        },
+                    }
                 })
-                .state('profile', {
+                .state('app.profile', {
                     url: '/profile',
-                    templateUrl: 'views/profile/index.html',
-                    controller: 'ProfileCtrl',
-                    controllerAs: 'profilevm'
+                    views: {
+                        '@': {
+                            templateUrl: 'views/profile/index.html',
+                            controller: 'ProfileCtrl',
+                            controllerAs: 'profilevm'
+                        }
+                    }
                 })
-                .state('jobs', {
+                .state('app.jobs', {
                     abstract: true,
                     resolve: {
                         user: function (Auth) {
@@ -56,18 +104,22 @@
                     url: '/jobs',
                     templateUrl: 'views/jobs/index.html'
                 })
-                .state('jobs.list', {
+                .state('app.jobs.list', {
                     url: '',
                     resolve: {
                         jobs: function (JobsFactory, user) {
                             return JobsFactory.getAll(user.uid);
                         }
                     },
-                    templateUrl: 'views/jobs/jobs.html',
-                    controller: 'JobsCtrl',
-                    controllerAs: 'jobsvm'
+                    views:{
+                      '@':{
+                          templateUrl: 'views/jobs/jobs.html',
+                          controller: 'JobsCtrl',
+                          controllerAs: 'jobsvm'
+                      }
+                    }
                 })
-                .state('jobs.job', {
+                .state('app.jobs.job', {
                     url: '/:job',
                     resolve: {
                         job: function (JobsFactory, $stateParams) {
@@ -80,14 +132,18 @@
                     onEnter: function ($state, job, user) {
                         if (job.user_id != user.uid) $state.go('home');
                     },
-                    templateUrl: 'views/jobs/job.html',
-                    controller: 'JobsJobCtrl',
-                    controllerAs: 'jobvm'
+                    views:{
+                        '@': {
+                            templateUrl: 'views/jobs/job.html',
+                            controller: 'JobsJobCtrl',
+                            controllerAs: 'jobvm'
+                        }
+                    }
                 })
 
             ;
 
-            $urlRouterProvider.otherwise('/');
+            $urlRouterProvider.otherwise('/app/home');
             // $locationProvider.html5Mode(true);
 
             $httpProvider.interceptors.push('Loading');
