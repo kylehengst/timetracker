@@ -134,7 +134,7 @@
     angular.module('app.routes', [])
 
         .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
-
+            
             $stateProvider
 
                 .state('app',{
@@ -142,10 +142,8 @@
                     abstract:true,
                     resolve:{
                         auth: function(Auth){
-                            return Auth.$waitForAuth().then(function(user){
-                                return user;
-                            },function(error){
-                                return false;
+                            return Auth.$waitForAuth().then(function(){
+                                return Auth.$getAuth();
                             });
                         }
                     },
@@ -213,6 +211,14 @@
                 })
                 .state('app.profile', {
                     url: '/profile',
+                    resolve: {
+                        user: function (Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    },
+                    onEnter: function (user, $state) {
+                        if (!user) $state.go('home');
+                    },
                     views: {
                         '@': {
                             templateUrl: 'views/profile/index.html',
@@ -346,16 +352,21 @@
 
     NavCtrl.$inject = ['$state','$stateParams', '$rootScope', 'Auth'];
 
-    function NavCtrl($state, $stateParams, $rootScope, auth) {
+    function NavCtrl($state, $stateParams, $rootScope, Auth) {
 
         var navvm = this;
-        navvm.auth = auth;
+        navvm.auth = Auth.$getAuth();
         navvm.logout = logout;
-        
+
         function logout(){
             Auth.$unauth();
             $state.go('auth.login');
         }
+
+        Auth.$onAuth(function(auth){
+            navvm.auth = auth;
+        });
+
     }
 
 
@@ -367,12 +378,13 @@
 
         .controller('TimersCtrl', TimersCtrl);
 
-    TimersCtrl.$inject = ['$state','$stateParams', '$interval', 'auth', 'Timers'];
+    TimersCtrl.$inject = ['$state','$stateParams', '$interval', 'Auth', 'Timers'];
 
-    function TimersCtrl($state, $stateParams, $interval, auth, Timers) {
+    function TimersCtrl($state, $stateParams, $interval, Auth, Timers) {
 
         var timersvm = this;
-        timersvm.timers = auth ? Timers.getAll(auth.uid) : null;
+        timersvm.auth = Auth.$getAuth();
+        timersvm.timers = timersvm.auth ? Timers.getAll(timersvm.auth.uid) : null;
         timersvm.start = start;
         timersvm.stop = stop;
         timersvm.add = add;
@@ -402,8 +414,13 @@
             }
         }
         function add(){
-            timersvm.timers.$add({user_id:auth.uid,description:'',hours:0,minutes:0,seconds:0});
+            timersvm.timers.$add({user_id:timersvm.auth.uid,description:'',hours:0,minutes:0,seconds:0});
         }
+
+        Auth.$onAuth(function(auth){
+            console.log('timers',auth);
+            timersvm.auth = auth;
+        });
 
     }
 
@@ -574,8 +591,7 @@
                 email: authvm.form.email,
                 password: authvm.form.password
             }).then(function (user) {
-                console.log(user);
-                $state.go('jobs.list');
+                $state.go('app.jobs.list');
             }, function (error) {
                 authvm.error = error.toString();
             });
@@ -598,9 +614,9 @@
                 email: authvm.form.email,
                 password: authvm.form.password
             }).then(function(userData) {
-                $state.go('auth.login');
+                $state.go('app.auth.login');
             }).then(function(authData) {
-                $state.go('home');
+                $state.go('app.home');
             }).catch(function(error) {
                 authvm.error = error.toString();
             });

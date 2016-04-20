@@ -4,7 +4,7 @@
     angular.module('app.routes', [])
 
         .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
-
+            
             $stateProvider
 
                 .state('app',{
@@ -12,10 +12,8 @@
                     abstract:true,
                     resolve:{
                         auth: function(Auth){
-                            return Auth.$waitForAuth().then(function(user){
-                                return user;
-                            },function(error){
-                                return false;
+                            return Auth.$waitForAuth().then(function(){
+                                return Auth.$getAuth();
                             });
                         }
                     },
@@ -83,6 +81,14 @@
                 })
                 .state('app.profile', {
                     url: '/profile',
+                    resolve: {
+                        user: function (Auth) {
+                            return Auth.$requireAuth();
+                        }
+                    },
+                    onEnter: function (user, $state) {
+                        if (!user) $state.go('home');
+                    },
                     views: {
                         '@': {
                             templateUrl: 'views/profile/index.html',

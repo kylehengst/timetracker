@@ -27,8 +27,7 @@
                 email: authvm.form.email,
                 password: authvm.form.password
             }).then(function (user) {
-                console.log(user);
-                $state.go('jobs.list');
+                $state.go('app.jobs.list');
             }, function (error) {
                 authvm.error = error.toString();
             });
@@ -51,9 +50,9 @@
                 email: authvm.form.email,
                 password: authvm.form.password
             }).then(function(userData) {
-                $state.go('auth.login');
+                $state.go('app.auth.login');
             }).then(function(authData) {
-                $state.go('home');
+                $state.go('app.home');
             }).catch(function(error) {
                 authvm.error = error.toString();
             });

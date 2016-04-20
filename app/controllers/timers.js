@@ -5,12 +5,13 @@
 
         .controller('TimersCtrl', TimersCtrl);
 
-    TimersCtrl.$inject = ['$state','$stateParams', '$interval', 'auth', 'Timers'];
+    TimersCtrl.$inject = ['$state','$stateParams', '$interval', 'Auth', 'Timers'];
 
-    function TimersCtrl($state, $stateParams, $interval, auth, Timers) {
+    function TimersCtrl($state, $stateParams, $interval, Auth, Timers) {
 
         var timersvm = this;
-        timersvm.timers = auth ? Timers.getAll(auth.uid) : null;
+        timersvm.auth = Auth.$getAuth();
+        timersvm.timers = timersvm.auth ? Timers.getAll(timersvm.auth.uid) : null;
         timersvm.start = start;
         timersvm.stop = stop;
         timersvm.add = add;
@@ -40,8 +41,13 @@
             }
         }
         function add(){
-            timersvm.timers.$add({user_id:auth.uid,description:'',hours:0,minutes:0,seconds:0});
+            timersvm.timers.$add({user_id:timersvm.auth.uid,description:'',hours:0,minutes:0,seconds:0});
         }
+
+        Auth.$onAuth(function(auth){
+            console.log('timers',auth);
+            timersvm.auth = auth;
+        });
 
     }
 
