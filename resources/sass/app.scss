@@ -1,5 +1,12 @@
+@import "partials/offcanvas";
+
+@-moz-document url-prefix() {
+  fieldset { display: table-cell; }
+}
+
 body {
   padding-top: 70px;
+  padding-bottom: 80px;
 }
 
 #loading {
@@ -17,6 +24,9 @@ body {
   z-index: 9999;
 }
 
+h1:first-of-type,h2:first-of-type,h3:first-of-type{
+  margin-top: 0;
+}
 h2 {
   margin-bottom: 20px;
 }
@@ -39,3 +49,4 @@ h2 {
 .actions {
   text-align: right;
 }
+

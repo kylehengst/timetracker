@@ -134,26 +134,26 @@
     angular.module('app.routes', [])
 
         .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
-            
+
             $stateProvider
 
-                .state('app',{
-                    url:'/app',
-                    abstract:true,
-                    resolve:{
-                        auth: function(Auth){
-                            return Auth.$waitForAuth().then(function(){
+                .state('app', {
+                    url: '/app',
+                    abstract: true,
+                    resolve: {
+                        auth: function (Auth) {
+                            return Auth.$waitForAuth().then(function () {
                                 return Auth.$getAuth();
                             });
                         }
                     },
-                    views:{
-                        'nav@':{
+                    views: {
+                        'nav@': {
                             templateUrl: 'views/nav.html',
                             controller: 'NavCtrl',
                             controllerAs: 'navvm'
                         },
-                        'timers@':{
+                        'timers@': {
                             templateUrl: 'views/timers.html',
                             controller: 'TimersCtrl',
                             controllerAs: 'timersvm'
@@ -166,8 +166,8 @@
                     onEnter: function ($state, auth) {
                         if (!auth) $state.go('app.auth.login');
                     },
-                    views:{
-                        '@':{
+                    views: {
+                        '@': {
                             templateUrl: 'views/index.html',
                             controller: 'MainCtrl',
                             controllerAs: 'mainvm'
@@ -247,12 +247,12 @@
                             return JobsFactory.getAll(user.uid);
                         }
                     },
-                    views:{
-                      '@':{
-                          templateUrl: 'views/jobs/jobs.html',
-                          controller: 'JobsCtrl',
-                          controllerAs: 'jobsvm'
-                      }
+                    views: {
+                        '@': {
+                            templateUrl: 'views/jobs/jobs.html',
+                            controller: 'JobsCtrl',
+                            controllerAs: 'jobsvm'
+                        }
                     }
                 })
                 .state('app.jobs.job', {
@@ -268,7 +268,7 @@
                     onEnter: function ($state, job, user) {
                         if (job.user_id != user.uid) $state.go('home');
                     },
-                    views:{
+                    views: {
                         '@': {
                             templateUrl: 'views/jobs/job.html',
                             controller: 'JobsJobCtrl',
@@ -311,6 +311,12 @@
                     console.log('$stateNotFound ' + unfoundState.to + '  - fired when a state cannot be found by its name.');
                     console.log(unfoundState, fromState, fromParams);
                 });
+            }
+
+            $rootScope.offcanvas = false;
+            $rootScope.toggleTimers = function(){
+                console.log($rootScope.offcanvas);
+                $rootScope.offcanvas = !$rootScope.offcanvas;
             }
 
         })

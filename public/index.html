@@ -13,8 +13,8 @@
 
 <div class="container">
 
-    <div class="row">
-        <div class="col-sm-3">
+    <div class="row row-offcanvas row-offcanvas-left" ng-class="{active:$root.offcanvas}">
+        <div class="col-sm-3 sidebar-offcanvas">
             <div ui-view="timers"></div>
         </div>
         <div class="col-sm-9">
@@ -23,6 +23,10 @@
     </div>
 
 </div>
+
+<a class="toggle-canvas btn btn-primary" ng-click="$root.toggleTimers()">
+    <i class="fa fa-clock-o"></i>
+</a>
 
 <script src="assets/js/components.js"></script>
 <script src="assets/js/app.js"></script>

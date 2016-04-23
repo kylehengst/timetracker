@@ -5,11 +5,21 @@
     </p>
 
     <div class="well" ng-repeat="timer in timersvm.timers">
-        <input type="text" class="form-control" ng-model="timer.description" ng-change="timersvm.timers.$save(timer)">
-        <p>{{timer.hours}}:{{timer.minutes}}:{{timer.seconds}}</p>
-        <a class="btn btn-xs btn-primary pull-right" ng-show="!timersvm.activeTimers[timer.$id]" ng-click="timersvm.start(timer)">Start</a>
-        <a class="btn btn-xs btn-primary pull-right" ng-show="timersvm.activeTimers[timer.$id]" ng-click="timersvm.stop(timer)">Stop</a>
-        <a class="btn btn-xs btn-danger" really-click="timersvm.timers.$remove(timer)" really-message="Are you sure?">Delete</a>
+        <h3>{{timer.hours}}:{{timer.minutes}}:{{timer.seconds}}</h3>
+        <div class="form-group">
+            <input placeholder="Description" type="text" class="form-control"
+                   ng-model="timer.description" ng-change="timersvm.timers.$save(timer)">
+        </div>
+        <a class="btn btn-xs btn-primary pull-right"
+           ng-show="!timersvm.activeTimers[timer.$id]"
+           ng-click="timersvm.start(timer)">Start</a>
+        <a class="btn btn-xs btn-primary pull-right"
+           ng-show="timersvm.activeTimers[timer.$id]"
+           ng-click="timersvm.stop(timer)">Stop</a>
+        <a class="btn btn-xs btn-danger"
+           really-click="timersvm.timers.$remove(timer)" really-message="Are you sure?">
+            <i class="fa fa-trash"></i>
+        </a>
     </div>
 
 </div>
