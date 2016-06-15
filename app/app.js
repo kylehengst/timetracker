@@ -12,8 +12,9 @@
         'firebase',
         'xeditable',
 
+        'env',
+
         'app.routes',
-        'app.config',
         'app.filters',
 
         'app.directives',   

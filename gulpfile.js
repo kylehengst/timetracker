@@ -3,6 +3,8 @@ var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var sourcemaps = require('gulp-sourcemaps');
+var order = require('gulp-order');
+var dir = __dirname;
 
 var sassOptions = {
     errLogToConsole: true,
@@ -58,7 +60,7 @@ gulp.task('css_prefix', ['css_sass'], function(){
 });
 gulp.task('concat_js',function(){
     return gulp
-        .src(['./app/**/*.js'])
+        .src(['./env.js','./app/**/*.js'])
         .pipe(concat('app.js'))
         .pipe(gulp.dest('./public/assets/js'))
         ;

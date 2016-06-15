@@ -5,11 +5,11 @@
 
         .factory('Auth', Auth);
 
-    Auth.$inject = ['$firebaseAuth', 'FIREBASE_URL'];
+    Auth.$inject = ['$firebaseAuth', 'CONFIG'];
 
-    function Auth($firebaseAuth, FIREBASE_URL) {
+    function Auth($firebaseAuth, CONFIG) {
 
-        var ref = new Firebase(FIREBASE_URL);
+        var ref = new Firebase(CONFIG.FIREBASE_URL);
         return $firebaseAuth(ref);
         
         // return {

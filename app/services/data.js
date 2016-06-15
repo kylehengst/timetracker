@@ -5,15 +5,15 @@
 
         .service('Data', Data);
 
-    Data.$inject = ['$http', 'API_URL'];
+    Data.$inject = ['$http', 'CONFIG'];
 
-    function Data($http, API_URL) {
+    function Data($http, CONFIG) {
 
         var model = this;
         model.getLatest = getLatest;
 
         var urls = {
-            LATEST: API_URL+'latest'
+            //LATEST: CONFIG.API_URL+'latest'
         };
 
         /**
@@ -22,9 +22,9 @@
          */
 
         function getLatest(){
-            return $http.get(urls.LATEST).then(function(response){
-                return response.data;
-            });
+            //return $http.get(urls.LATEST).then(function(response){
+            //    return response.data;
+            //});
         }
 
     }

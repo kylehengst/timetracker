@@ -5,11 +5,11 @@
 
         .factory('JobsFactory', JobsFactory);
 
-    JobsFactory.$inject = ['FIREBASE_URL', '$firebaseArray', '$firebaseObject'];
+    JobsFactory.$inject = ['CONFIG', '$firebaseArray', '$firebaseObject'];
 
-    function JobsFactory(FIREBASE_URL, $firebaseArray, $firebaseObject) {
+    function JobsFactory(CONFIG, $firebaseArray, $firebaseObject) {
 
-        var url = FIREBASE_URL + 'jobs';
+        var url = CONFIG.FIREBASE_URL + 'jobs';
 
         return {
             getAll: function (uid) {

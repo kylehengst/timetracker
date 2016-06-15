@@ -5,11 +5,11 @@
 
         .factory('Timers', Timers);
 
-    Timers.$inject = ['FIREBASE_URL', '$firebaseArray','$firebaseObject'];
+    Timers.$inject = ['CONFIG', '$firebaseArray','$firebaseObject'];
 
-    function Timers(FIREBASE_URL, $firebaseArray, $firebaseObject) {
+    function Timers(CONFIG, $firebaseArray, $firebaseObject) {
 
-        var url = FIREBASE_URL+'timers';
+        var url = CONFIG.FIREBASE_URL+'timers';
 
         return {
             getAll: function (uid) {

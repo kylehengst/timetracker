@@ -1,6 +1,19 @@
 (function() {
     'use strict';
 
+    angular.module('env', [])
+
+        .constant('CONFIG',{
+            ENV:'dev',
+            FIREBASE_URL: 'https://time-tracker-angular.firebaseio.com/'
+        })
+
+    ;
+
+})();
+(function() {
+    'use strict';
+
     angular.module('app', [
 
         'ngTouch',
@@ -12,8 +25,9 @@
         'firebase',
         'xeditable',
 
+        'env',
+
         'app.routes',
-        'app.config',
         'app.filters',
 
         'app.directives',   
@@ -23,19 +37,6 @@
 
 })();
 
-(function() {
-    'use strict';
-
-    angular.module('app.config', [])
-
-        // prod || dev
-        .constant('ENV','dev')
-        .constant('API_URL','')
-        .constant('FIREBASE_URL','https://time-tracker-angular.firebaseio.com/')
-
-    ;
-
-})();
 (function() {
     'use strict';
 
@@ -327,6 +328,30 @@
 (function() {
     'use strict';
 
+    angular
+        .module('app.directives')
+        .directive('dcTest', dcTest);
+
+    function dcTest() {
+
+        var directive = {
+            link: link,
+            templateUrl: 'views/directives/test.html',
+            replace:true,
+            restrict: 'A'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+
+        }
+
+    }
+
+})();
+(function() {
+    'use strict';
+
     angular.module('app.controllers')
 
         .controller('MainCtrl', MainCtrl);
@@ -434,39 +459,15 @@
 (function() {
     'use strict';
 
-    angular
-        .module('app.directives')
-        .directive('dcTest', dcTest);
-
-    function dcTest() {
-
-        var directive = {
-            link: link,
-            templateUrl: 'views/directives/test.html',
-            replace:true,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-
-        }
-
-    }
-
-})();
-(function() {
-    'use strict';
-
     angular.module('app')
 
         .factory('Auth', Auth);
 
-    Auth.$inject = ['$firebaseAuth', 'FIREBASE_URL'];
+    Auth.$inject = ['$firebaseAuth', 'CONFIG'];
 
-    function Auth($firebaseAuth, FIREBASE_URL) {
+    function Auth($firebaseAuth, CONFIG) {
 
-        var ref = new Firebase(FIREBASE_URL);
+        var ref = new Firebase(CONFIG.FIREBASE_URL);
         return $firebaseAuth(ref);
         
         // return {
@@ -487,15 +488,15 @@
 
         .service('Data', Data);
 
-    Data.$inject = ['$http', 'API_URL'];
+    Data.$inject = ['$http', 'CONFIG'];
 
-    function Data($http, API_URL) {
+    function Data($http, CONFIG) {
 
         var model = this;
         model.getLatest = getLatest;
 
         var urls = {
-            LATEST: API_URL+'latest'
+            //LATEST: CONFIG.API_URL+'latest'
         };
 
         /**
@@ -504,9 +505,9 @@
          */
 
         function getLatest(){
-            return $http.get(urls.LATEST).then(function(response){
-                return response.data;
-            });
+            //return $http.get(urls.LATEST).then(function(response){
+            //    return response.data;
+            //});
         }
 
     }
@@ -519,25 +520,25 @@
 
         .factory('Loading', Loading);
 
-    Loading.$inject = ['$rootScope', '$q','ENV'];
+    Loading.$inject = ['$rootScope', '$q','CONFIG'];
 
-    function Loading($rootScope, $q, ENV) {
+    function Loading($rootScope, $q, CONFIG) {
 
         return {
             request: function (config) {
-                if(ENV=='dev') console.log(config);
+                if(CONFIG.ENV=='dev') console.log(config);
                 return config;
             },
             requestError: function (rejection) {
-                if(ENV=='dev') console.log(rejection);
+                if(CONFIG.ENV=='dev') console.log(rejection);
                 return $q.reject(rejection);
             },
             response: function (response) {
-                if(ENV=='dev') console.log(response);
+                if(CONFIG.ENV=='dev') console.log(response);
                 return response;
             },
             responseError: function (rejection) {
-                if(ENV=='dev') console.log(rejection);
+                if(CONFIG.ENV=='dev') console.log(rejection);
                 return $q.reject(rejection);
             }
         }
@@ -552,11 +553,11 @@
 
         .factory('Timers', Timers);
 
-    Timers.$inject = ['FIREBASE_URL', '$firebaseArray','$firebaseObject'];
+    Timers.$inject = ['CONFIG', '$firebaseArray','$firebaseObject'];
 
-    function Timers(FIREBASE_URL, $firebaseArray, $firebaseObject) {
+    function Timers(CONFIG, $firebaseArray, $firebaseObject) {
 
-        var url = FIREBASE_URL+'timers';
+        var url = CONFIG.FIREBASE_URL+'timers';
 
         return {
             getAll: function (uid) {
@@ -696,11 +697,11 @@
 
         .factory('JobsFactory', JobsFactory);
 
-    JobsFactory.$inject = ['FIREBASE_URL', '$firebaseArray', '$firebaseObject'];
+    JobsFactory.$inject = ['CONFIG', '$firebaseArray', '$firebaseObject'];
 
-    function JobsFactory(FIREBASE_URL, $firebaseArray, $firebaseObject) {
+    function JobsFactory(CONFIG, $firebaseArray, $firebaseObject) {
 
-        var url = FIREBASE_URL + 'jobs';
+        var url = CONFIG.FIREBASE_URL + 'jobs';
 
         return {
             getAll: function (uid) {
@@ -815,11 +816,11 @@
 
         .factory('JobsTimesFactory', JobsTimesFactory);
 
-    JobsTimesFactory.$inject = ['FIREBASE_URL','$firebaseArray','$firebaseObject'];
+    JobsTimesFactory.$inject = ['CONFIG','$firebaseArray','$firebaseObject'];
 
-    function JobsTimesFactory(FIREBASE_URL, $firebaseArray, $firebaseObject) {
+    function JobsTimesFactory(CONFIG, $firebaseArray, $firebaseObject) {
 
-        var url = FIREBASE_URL+'times/:job';
+        var url = CONFIG.FIREBASE_URL+'times/:job';
 
         return {
             getAll: function(jobId,uid){
