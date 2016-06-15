@@ -10,8 +10,8 @@
     function TimersCtrl($state, $stateParams, $interval, Auth, Timers) {
 
         var timersvm = this;
-        timersvm.auth = Auth.$getAuth();
-        timersvm.timers = timersvm.auth ? Timers.getAll(timersvm.auth.uid) : null;
+        timersvm.auth = null;
+        timersvm.timers = null;
         timersvm.start = start;
         timersvm.stop = stop;
         timersvm.add = add;
@@ -45,8 +45,13 @@
         }
 
         Auth.$onAuth(function(auth){
-            console.log('timers',auth);
+            if(!auth) {
+                timersvm.auth = null;
+                timersvm.timers = null;
+                return;
+            }
             timersvm.auth = auth;
+            timersvm.timers = Timers.getAll(auth.uid);
         });
 
     }

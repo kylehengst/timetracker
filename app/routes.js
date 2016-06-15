@@ -156,14 +156,14 @@
 
         })
 
-        .run(function ($rootScope, ENV, editableOptions) {
+        .run(function ($rootScope, CONFIG, editableOptions) {
 
-            $rootScope.ENV = ENV;
+            $rootScope.ENV = CONFIG.ENV;
             $rootScope.loading = 0;
             editableOptions.theme = 'bs3';
 
             //state listeners
-            if (ENV == 'dev') {
+            if (CONFIG.ENV == 'dev') {
                 $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                     console.log('$stateChangeStart to ' + toState.to + '- fired when the transition begins. toState,toParams : \n', toState, toParams);
                 });

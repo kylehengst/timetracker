@@ -287,14 +287,14 @@
 
         })
 
-        .run(function ($rootScope, ENV, editableOptions) {
+        .run(function ($rootScope, CONFIG, editableOptions) {
 
-            $rootScope.ENV = ENV;
+            $rootScope.ENV = CONFIG.ENV;
             $rootScope.loading = 0;
             editableOptions.theme = 'bs3';
 
             //state listeners
-            if (ENV == 'dev') {
+            if (CONFIG.ENV == 'dev') {
                 $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                     console.log('$stateChangeStart to ' + toState.to + '- fired when the transition begins. toState,toParams : \n', toState, toParams);
                 });
@@ -323,30 +323,6 @@
         })
 
     ;
-
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.directives')
-        .directive('dcTest', dcTest);
-
-    function dcTest() {
-
-        var directive = {
-            link: link,
-            templateUrl: 'views/directives/test.html',
-            replace:true,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-
-        }
-
-    }
 
 })();
 (function() {
@@ -414,8 +390,8 @@
     function TimersCtrl($state, $stateParams, $interval, Auth, Timers) {
 
         var timersvm = this;
-        timersvm.auth = Auth.$getAuth();
-        timersvm.timers = timersvm.auth ? Timers.getAll(timersvm.auth.uid) : null;
+        timersvm.auth = null;
+        timersvm.timers = null;
         timersvm.start = start;
         timersvm.stop = stop;
         timersvm.add = add;
@@ -449,9 +425,38 @@
         }
 
         Auth.$onAuth(function(auth){
-            console.log('timers',auth);
+            if(!auth) {
+                timersvm.auth = null;
+                timersvm.timers = null;
+                return;
+            }
             timersvm.auth = auth;
+            timersvm.timers = Timers.getAll(auth.uid);
         });
+
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.directives')
+        .directive('dcTest', dcTest);
+
+    function dcTest() {
+
+        var directive = {
+            link: link,
+            templateUrl: 'views/directives/test.html',
+            replace:true,
+            restrict: 'A'
+        };
+        return directive;
+
+        function link(scope, element, attrs) {
+
+        }
 
     }
 
