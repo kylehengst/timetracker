@@ -11,7 +11,7 @@ https://www.firebase.com/
 - npm install
 - bower install
 - gulp
-- create public/app/config.js
+- create env.js
 - copy firebase.rules.json into Firebase
 
 ## Gulp
